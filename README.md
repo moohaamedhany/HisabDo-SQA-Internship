@@ -1,8 +1,8 @@
 # HisabDo — SQA Internship
 
-This repository contains my Software Quality Assurance internship work at HisabDo.
+This repository contains my Software Quality Assurance (SQA) internship work at HisabDo.
 
-## 📚 Internship Tasks
+## Internship Tasks
 
 | Day | Topic | Deliverables |
 |---|---|---|
@@ -16,21 +16,36 @@ This repository contains my Software Quality Assurance internship work at HisabD
 | Day 8–9 | Capstone QA Planning | Test Plan, Test Cases |
 | Day 10 | Test Execution | Execution Report, Bug Reports |
 
-## 🛠️ Skills
+## Repository Structure
 
+Each day's work is organized in its own folder:
+
+- HisabDo-SQA-Day1
+- HisabDo-SQA-Day2
+- HisabDo-SQA-Day3
+- HisabDo-SQA-Day4
+- HisabDo-SQA-Day5
+- HisabDo-SQA-Day6
+- HisabDo-SQA-Day7
+- HisabDo-SQA-Day8-9
+- HisabDo-SQA-Day10
+
+New files, test cases, reports, screenshots, and other internship deliverables will be added to the corresponding day's folder as the internship progresses.
+
+## Skills
+
+- Software Quality Assurance
 - Manual Testing
-- Mobile Application Testing
-- API Testing
-- Postman
 - Test Case Design
 - Bug Reporting
-- Functional Testing
-- Regression Testing
-- Negative Testing
-- Boundary Testing
+- API Testing
+- Postman
+- Test Documentation
+- Test Execution
+- QA Planning
 
+ 
 ## 👤 Tester
-
 Mohamed Hany  
 Software Quality Assurance Intern
 
