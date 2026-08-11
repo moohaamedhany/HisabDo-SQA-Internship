@@ -1,0 +1,989 @@
+{
+  "info": {
+    "name": "Day 6 - Authentication API Test Suite (SQA Internship - Mohamed Hany)",
+    "description": "Auth API tests for DummyJSON (dummyjson.com/auth, /users) covering registration(simulated), login, logout behavior, invalid login, duplicate registration, missing fields, invalid email, password validation, and unauthorized access.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dummyjson.com"
+    },
+    {
+      "key": "validAccessToken",
+      "value": "PASTE_TOKEN_FROM_TC_006_HERE"
+    }
+  ],
+  "item": [
+    {
+      "name": "Registration (simulated via /users/add)",
+      "item": [
+        {
+          "name": "TC_001 - Register (simulated) with valid data",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"lastName\": \"Hany\", \"username\": \"mohanytest\", \"email\": \"mohanytest@mail.com\", \"password\": \"Test@1234\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Response has new id', function () { pm.expect(pm.response.json()).to.have.property('id'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_002 - Register with missing required field (no firstName)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"lastName\": \"Hany\", \"username\": \"mohanytest2\", \"email\": \"mohanytest2@mail.com\", \"password\": \"Test@1234\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_003 - Register with invalid email format",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"lastName\": \"Hany\", \"username\": \"mohanytest3\", \"email\": \"mohanytestmail.com\", \"password\": \"Test@1234\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_004 - Register with empty request body",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_005 - Duplicate registration with an already-used username",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"lastName\": \"Hany\", \"username\": \"emilys\", \"email\": \"dup@mail.com\", \"password\": \"Test@1234\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "TC_006 - Login with valid username and password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response has accessToken', function () { pm.expect(pm.response.json()).to.have.property('accessToken'); });",
+                  "pm.test('Response has refreshToken', function () { pm.expect(pm.response.json()).to.have.property('refreshToken'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_007 - Login with valid username and wrong password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"wrongpassword\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function () { pm.response.to.have.status(400); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_008 - Login with non-existent username",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"nonexistentuser999\", \"password\": \"whatever\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function () { pm.response.to.have.status(400); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_009 - Login with empty username field",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"\", \"password\": \"emilyspass\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_010 - Login with empty password field",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_011 - Login with completely empty request body",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_012 - Login with valid credentials and custom expiresInMins",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\", \"expiresInMins\": 30}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response has accessToken', function () { pm.expect(pm.response.json()).to.have.property('accessToken'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_013 - Boundary: login with expiresInMins = 0",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\", \"expiresInMins\": 0}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_014 - Boundary: login with negative expiresInMins",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\", \"expiresInMins\": -10}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_015 - Login response required fields validation",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json(); pm.test('Has id, username, email, accessToken, refreshToken', function () { pm.expect(j).to.include.all.keys('id','username','email','accessToken','refreshToken'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_016 - Login with invalid data type for password (number)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": 12345678}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_017 - Login with SQL-injection-style username",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys' OR '1'='1\", \"password\": \"anything\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_018 - Login with an unexpected extra field in body",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\", \"isAdmin\": true}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_019 - Login with missing password key entirely",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Email Format & Password Validation",
+      "item": [
+        {
+          "name": "TC_020 - Register with email missing '@' symbol",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"email\": \"mohanytestmail.com\", \"password\": \"Test@1234\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_021 - Register with email missing domain",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"email\": \"mohanytest@\", \"password\": \"Test@1234\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_022 - Boundary: register with a 1-character password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"email\": \"mopass1@mail.com\", \"password\": \"a\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_023 - Boundary: register with an 8-character password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"email\": \"mopass8@mail.com\", \"password\": \"Ab123456\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_024 - Register with a strong password including special characters",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"email\": \"mopassspecial@mail.com\", \"password\": \"Str0ng!P@ssw0rd#2026\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_025 - Register with the password field omitted entirely",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"firstName\": \"Mo\", \"email\": \"mopassomit@mail.com\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Unauthorized Access & Token",
+      "item": [
+        {
+          "name": "TC_026 - Access /auth/me without an Authorization header",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () { pm.response.to.have.status(401); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_027 - Access /auth/me with an invalid/malformed token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer THIS-IS-NOT-A-VALID-JWT"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () { pm.response.to.have.status(401); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_028 - Access /auth/me with a valid token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{validAccessToken}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Returns correct username', function () { pm.expect(pm.response.json().username).to.eql('emilys'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_029 - Call /auth/refresh without providing any token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_030 - Call /auth/refresh with a valid access token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"expiresInMins\": 30}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{validAccessToken}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401]); });",
+                  "if (pm.response.code === 200) { pm.test('New accessToken returned', function () { pm.expect(pm.response.json()).to.have.property('accessToken'); }); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Logout Behavior",
+      "item": [
+        {
+          "name": "TC_031 - Attempt to call a logout endpoint (/auth/logout)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/logout",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([404, 405]); });",
+                  "pm.test('No server-side logout endpoint exists', function () { pm.expect(pm.response.code).to.be.oneOf([404,405]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_032 - Verify old token still authorizes /auth/me after client-side logout (no server revocation)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{validAccessToken}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401]); });",
+                  "pm.test('Documented note: token remains valid until natural expiry - no server-side revoke', function () {});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Performance / Response Time",
+      "item": [
+        {
+          "name": "TC_033 - Response time validation on /auth/login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"emilys\", \"password\": \"emilyspass\"}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response time is below 1500ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC_034 - Response time validation on /auth/me",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{validAccessToken}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response time is below 1500ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,960 @@
+{
+  "info": {
+    "_postman_id": "2b56e399-e420-4b1f-8965-1a385b6e86fb",
+    "name": "Day 5 - DummyJSON API Test Suite (SQA Internship - Mohamed Hany)",
+    "description": "Complete API test suite for https://dummyjson.com/products covering functional, validation, and response validation testing.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53498792",
+    "_collection_link": "https://go.postman.co/collection/53498792-2b56e399-e420-4b1f-8965-1a385b6e86fb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET Requests",
+      "item": [
+        {
+          "name": "TC_001 - Get all products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_002 - Get single product by valid ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_003 - Get product with non-existent ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_004 - Get product with invalid ID format",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_005 - Search products with valid keyword",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/search?q=phone",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "phone"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_006 - Search products with no matching keyword",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/search?q=zzzznotfound123",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "zzzznotfound123"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_007 - Get products by valid category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/category/smartphones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "category",
+                "smartphones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_008 - Get products by invalid category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/category/invalidcategoryxyz",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "category",
+                "invalidcategoryxyz"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_009 - Boundary: limit=0 returns all items",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products?limit=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_010 - Get request on invalid endpoint",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/xyzinvalidendpoint",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "xyzinvalidendpoint"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_011 - Boundary: get product with negative ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/-1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "-1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_012 - Boundary: get product with ID = 0",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "POST Requests",
+      "item": [
+        {
+          "name": "TC_013 - Create product with valid full data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Response has new numeric id', function () { pm.expect(pm.response.json().id).to.be.a('number'); });",
+                  "pm.test('Title matches sent data', function () { pm.expect(pm.response.json().title).to.eql('Test Product'); });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Test Product\", \"price\": 19.99, \"category\": \"test\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_014 - Create product with only title (missing other fields)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Only Title Product\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_015 - Create product with empty request body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201,400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_016 - Create product with invalid data type for price",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201,400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Bad Price Product\", \"price\": \"not-a-number\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_017 - Create product with duplicate title of an existing product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Essence Mascara Lash Princess\", \"price\": 9.99}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PUT/PATCH Requests",
+      "item": [
+        {
+          "name": "TC_018 - Update existing product with valid data (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Title was updated', function () { pm.expect(pm.response.json().title).to.eql('Updated Product Title'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Updated Product Title\", \"price\": 29.99}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_019 - Update non-existent product (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200,404]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"x\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_020 - Update product with empty request body (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200,400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_021 - Partially update product - single field (PATCH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Only price changed', function () { pm.expect(pm.response.json().price).to.eql(15.5); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"price\": 15.5}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_022 - Partially update product with invalid data type (PATCH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200,400]); });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"price\": \"abc\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DELETE Requests",
+      "item": [
+        {
+          "name": "TC_023 - Delete existing product (valid ID)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\"pm.test('Status code is 200', function () { pm.response.to.have.status(200); });\", \"pm.test('isDeleted flag is true', function () { pm.expect(pm.response.json().isDeleted).to.eql(true); });\"]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_024 - Delete non-existent product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\"pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200,404]); });\"]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_025 - Delete product with invalid ID format",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\"pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200,404]); });\"]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Response Validation",
+      "item": [
+        {
+          "name": "TC_026 - Response time validation on GET /products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_027 - Schema/data-type validation for a single product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_028 - Error message structure for invalid ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_029 - Validate categories endpoint returns array of objects",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_030 - Validate category-list endpoint returns array of strings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/category-list",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "category-list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC_031 - Verify newly created product ID follows numeric sequence",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('New id is a positive number', function () { pm.expect(pm.response.json().id).to.be.above(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Sequence Check Product\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dummyjson.com"
+    }
+  ]
+}

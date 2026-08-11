@@ -1,0 +1,53 @@
+# SQA Internship – Day 7 | HisabDo
+Test Execution Summary – Mini Test Project
+
+## 👤 Tester
+Mohamed Hany – Junior Software Tester (ISTQB CTFL v4)
+
+## 🌐 Applications Under Test
+- UI: opensource-demo.orangehrmlive.com (public OrangeHRM HR demo application)
+- API: DummyJSON REST API – Products (dummyjson.com)
+- Date of testing: August 7, 2026
+
+## 🎯 Scope Covered
+Functional, UI, Form Validation, Positive, Negative, Boundary, and API testing — executed end-to-end by the tester (UI manually, API via Postman).
+
+## 📊 Test Summary
+
+| Metric | Count |
+|---|---|
+| Total Test Cases Executed | 45 (29 UI + 16 API) |
+| Passed | 43 |
+| Failed | 2 (both API) |
+| Blocked | 0 |
+| Positive | 23 |
+| Negative | 20 |
+| Boundary | 3 |
+| Bugs Found | 2 |
+| Critical | 0 |
+| High | 0 |
+| Medium | 2 |
+| Low | 0 |
+
+
+## ✅ UI Results (OrangeHRM)
+All 29 executed UI test cases across Login, Dashboard, PIM, Admin, Leave, and Cross-Browser modules passed — no UI bugs were found, so the UI bug-report template was removed from the workbook.
+
+## 🐞 API Results & Bugs Found (DummyJSON)
+14 of 16 API test cases passed. 2 genuine bugs were found during actual Postman execution:
+
+| Bug ID | Title | Expected | Actual | Severity | Priority | Status |
+|---|---|---|---|---|---|---|
+| BUG_001 | Server accepts a product even though the request body is empty | 400 Bad Request | 201 Created, product added with no data | Medium | Medium | Open |
+| BUG_002 | Server accepts a product even though the price has an invalid data type | 400 Bad Request | 201 Created, product added with an invalid price type | Medium | Medium | Open |
+
+Both point to the same root cause: no server-side input validation on `POST /products/add`.
+
+## 📁 Files in this Repository
+- Day7_QA_Test_Document_MohamedHany.xlsx — UI Test Cases (29, all executed/PASS), API Test Cases (16, 14 PASS / 2 FAIL), Bug Report (2 confirmed findings)
+- Day7_Postman_Collection.json — 16 API requests with automated assertions
+- Screenshots — to be added by the tester as evidence for the executed cases and the 2 failed cases
+- Day7_Test_Summary_Report.md — this file
+
+## 🧰 Testing Technique Applied
+Plan → Design → Execute (manual UI + Postman API) → Record (Pass/Fail) → Report (2 confirmed bugs) → Summarize

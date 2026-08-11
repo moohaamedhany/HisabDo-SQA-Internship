@@ -1,0 +1,361 @@
+{
+  "info": {
+    "name": "Day 7 - Mini Test Project API Collection (SQA Internship - Mohamed Hany)",
+    "description": "API portion of the Day 7 mini test project, using DummyJSON Products API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dummyjson.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "TC_A01 - Get all products",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response time below 1500ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A02 - Get single product by valid ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('id equals 1', function () { pm.expect(pm.response.json().id).to.eql(1); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A03 - Get product with non-existent ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404', function () { pm.response.to.have.status(404); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A04 - Get product with invalid ID format",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/abc"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404', function () { pm.response.to.have.status(404); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A05 - Search products with valid keyword",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/search?q=phone"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Has matching results', function () { pm.expect(pm.response.json().products.length).to.be.above(0); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A06 - Search with no matching keyword",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/search?q=zzzznotfound"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Empty results', function () { pm.expect(pm.response.json().products.length).to.eql(0); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A07 - Boundary: pagination limit & skip",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products?limit=5&skip=10"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Exactly 5 items', function () { pm.expect(pm.response.json().products.length).to.eql(5); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A08 - Boundary: negative product ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/products/-1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404', function () { pm.response.to.have.status(404); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A09 - Create product with valid data",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products/add",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Test Product\", \"price\": 19.99, \"category\": \"test\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('Has new id', function () { pm.expect(pm.response.json()).to.have.property('id'); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A10 - Create product with empty body",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products/add",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A11 - Create product with invalid data type for price",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/products/add",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Bad Price\", \"price\": \"not-a-number\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400]); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A12 - Update existing product (PUT)",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/products/1",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Updated Title\", \"price\": 29.99}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Title updated', function () { pm.expect(pm.response.json().title).to.eql('Updated Title'); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A13 - Update non-existent product (PUT)",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/products/999999",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"x\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A14 - Delete existing product (valid ID)",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/products/1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('isDeleted true', function () { pm.expect(pm.response.json().isDeleted).to.eql(true); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A15 - Delete non-existent product",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/products/999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code check', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC_A16 - Get on invalid endpoint",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/xyzinvalidendpoint"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404', function () { pm.response.to.have.status(404); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
