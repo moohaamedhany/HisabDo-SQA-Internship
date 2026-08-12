@@ -48,4 +48,3 @@ New files, test cases, reports, screenshots, and other internship deliverables w
 ## 👤 Tester
 Mohamed Hany  
 Software Quality Assurance Intern
-
